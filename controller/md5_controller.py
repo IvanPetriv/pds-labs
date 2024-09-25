@@ -1,9 +1,9 @@
 from kivy.lang import Builder
 from kivy.properties import StringProperty
 from kivy.uix.widget import Widget
-from plyer import filechooser
 
 from model.md5_model import Md5
+from services import file_manager
 
 
 Builder.load_file('view/md5_view.kv')
@@ -12,43 +12,49 @@ Builder.load_file('view/md5_view.kv')
 class Md5Controller(Widget):
     """
     Widget that takes a string argument and converts it to its hash form
-    using MD5 algorithm
+    using MD5 algorithm.
     """
     normal_text: StringProperty | str = StringProperty("")
     hashed_text: StringProperty | str = StringProperty("")
 
     def open_file(self) -> None:
         """
-        Opens the file manager that allows you to choose a text file,
-        after that reads and stores the contents of the chosen file
+        Opens the file manager to choose a text file, reads the content,
+        and stores it in `normal_text`.
         """
-        path = filechooser.open_file(title="Pick a text file..", filters=["*.txt"])
-        with open(path[0], "r") as text_file:
-            self.normal_text = text_file.read()
+        data = file_manager.open_file()
+
+        if data is not None:
+            self.normal_text = data
+
 
     def save_to_file(self) -> None:
         """
-        Opens the file manager that allows you to choose a directory,
-        after that creates a file and stores the hash there
+        Opens the file manager to choose a directory and saves the MD5 hash
+        to a file.
         """
-        file_path = filechooser.save_file(title="Save Hash", filters=["*.txt"])
-
-        if file_path:
-            if isinstance(file_path, list):
-                file_path = file_path[0]
-            try:
-                with open(file_path, 'w') as file:
-                    file.write(self.hashed_text)
-                print(f"File saved at: {file_path}")
-            except IOError as e:
-                print(f"An error occurred while saving the file: {e}")
-        else:
-            print("Save operation cancelled.")
+        file_manager.save_file(self.hashed_text)
 
 
     def generate_hash(self) -> None:
         """
-        Generates an MD5 hash from the input text and outputs it
+        Generates an MD5 hash from `normal_text` and stores it in `hashed_text`.
         """
+        self.normal_text = self.ids.input_text.text
         result = Md5.md5(self.normal_text)
         self.hashed_text = result
+
+    def check_file(self) -> None:
+        """
+        Checks if the hash of the chosen file matches `normal_text`.
+        """
+        file_data = file_manager.open_file()
+
+        if file_data is None:
+            return
+
+        hashed_data = Md5.md5(file_data)
+        if hashed_data == self.normal_text:
+            self.hashed_text = "File is valid."
+        else:
+            self.hashed_text = "File is not valid."

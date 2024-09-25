@@ -37,6 +37,10 @@
                     id: button_write_to_file_md5
                     text: "Save to file"
                     on_release: root.save_to_file()
+                Button:
+                    id: button_check_file
+                    text: "Check file by its hash"
+                    on_release: root.check_file()
 
         BoxLayout:
             orientation: "vertical"
