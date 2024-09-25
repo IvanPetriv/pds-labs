@@ -18,21 +18,29 @@
                 size_hint_y: 8
                 TextInput:
                     id: input_text
+                    text: root.normal_text
                     foreground_color: "#eeeeee"
                     background_color: "#444444"
                     background_normal: "white"
                 Button:
-                    text: "Select a file"
+                    text: "Insert from\na file"
                     on_release: root.open_file()
                     size_hint_x: 0.2
-            Button:
-                id: button_generate_md5
+                    font_size: 20
+            BoxLayout:
                 size_hint_y: 2
-                text: "Generate hash"
-                on_release: root.generate_hash()
+                Button:
+                    id: button_generate_md5
+                    text: "Generate hash"
+                    on_release: root.generate_hash()
+                Button:
+                    id: button_write_to_file_md5
+                    text: "Save to file"
+                    on_release: root.save_to_file()
+
         BoxLayout:
             orientation: "vertical"
             Label:
                 id: result_data
-                text: "Hi"
+                text: root.hashed_text
                 font_size: dp(30)
