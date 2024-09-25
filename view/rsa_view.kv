@@ -1,0 +1,38 @@
+<RsaController>:
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 20, 10
+
+        BoxLayout:
+            # Box that contains setup for calculation
+            orientation: "vertical"
+            size_hint_y: 1.6
+            padding: 20, 0
+            spacing: 30
+            Label:
+                text: "Enter parameters"
+                font_size: 30
+                size_hint_y: 2
+            BoxLayout:
+                size_hint_y: 8
+                TextInput:
+                    id: input_text
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
+                Button:
+                    text: "Select a file"
+                    on_release: root.open_file()
+                    size_hint_x: 0.2
+            Button:
+                id: button_generate_md5
+                size_hint_y: 2
+                text: "Generate hash"
+                on_release: root.generate_hash()
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                id: result_data
+                text: "Hi"
+                font_size: dp(30)

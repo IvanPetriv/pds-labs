@@ -1,0 +1,93 @@
+<LabelledTextInput>:
+    # Text input which consists of descriptive label and standard text input
+    text: input.text  # So LabelledTextInput.text gives the text of the input
+    Label:
+        text: root.label_text
+        font_size: self.height / 1.55
+        halign: "right"
+    TextInput:
+        id: input
+        on_text: root.input_validator(self.text)  # Validator
+        input_filter: root.expr_filter
+        hint_text: root.hint_text
+        multiline: False
+        size_hint_x: 2
+        font_size: self.height / 1.7
+        foreground_color: "#eeeeee"
+        background_color: "#444444" if root.is_valid else "#aa0000"
+        background_normal: "white"
+
+
+<LcgController>:
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.width, root.height
+        padding: 20, 10
+        BoxLayout:
+            # Box that contains setup for calculation
+            orientation: "vertical"
+            size_hint_x: 1.6
+            padding: 20, 0
+            spacing: 30
+            Label:
+                text: "Enter parameters"
+                font_size: 30
+                size_hint_y: 2
+
+            BoxLayout:
+                # Box that contains inputs
+                orientation: "vertical"
+                size_hint_y: 20
+                spacing: 2
+                LabelledTextInput:
+                    id: input_modulus
+                    label_text: "m"
+                    input_validator: root.check_modulus
+                    is_valid: root.is_modulus_valid
+                LabelledTextInput:
+                    id: input_multiplier
+                    label_text: "a"
+                    input_validator: root.check_multiplier
+                    is_valid: root.is_multiplier_valid
+                LabelledTextInput:
+                    id: input_increment
+                    label_text: "c"
+                    input_validator: root.check_increment
+                    is_valid: root.is_increment_valid
+                LabelledTextInput:
+                    id: input_start_val
+                    label_text: "X0"
+                    input_validator: root.check_start_val
+                    is_valid: root.is_start_val_valid
+                LabelledTextInput:
+                    id: input_count
+                    label_text: "Count"
+                    hint_text: "1000"
+
+            Button:
+                # Button to generate sequence
+                id: button_generate_lcg
+                on_release: root.generate_sequence()
+                text: "Generate sequence"
+                font_size: self.height / 2.2
+                size_hint_y: 5
+            Widget:
+                # Spacing
+                size_hint_y: 20
+        BoxLayout:
+            # Box that contains output
+            orientation: "vertical"
+            Label:
+                id: result_label
+                size_hint_y: 0.1
+                bold: True
+            ScrollView:
+                RecycleView:
+                    id: result_list
+                    viewclass: 'Label'
+                    RecycleBoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        default_size_hint: 1, None
+                        default_size: 0, dp(40)

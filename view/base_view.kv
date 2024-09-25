@@ -1,0 +1,28 @@
+<BaseController>:
+    # The base interface that contains all others
+    # Each interface has its own tab in TabbedPanel
+    BoxLayout:
+        size: root.width, root.height
+        orientation: "vertical"
+        TabbedPanel:
+            default_tab: tab_rc5
+            TabbedPanelItem:
+                id: tab_lcg
+                text: "LCG"
+                LcgController:
+            TabbedPanelItem:
+                id: tab_md5
+                text: "MD5"
+                Md5Controller:
+            TabbedPanelItem:
+                id: tab_rc5
+                text: "RC5"
+                Rc5Controller:
+            TabbedPanelItem:
+                id: tab_rsa
+                text: "RSA"
+                RsaController:
+            TabbedPanelItem:
+                id: tab_dss
+                text: "DSS"
+                DssController:

@@ -1,0 +1,44 @@
+<Rc5Controller>:
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 20, 10
+
+        BoxLayout:
+            # Box that contains setup for calculation
+            orientation: "vertical"
+            size_hint_y: 1.6
+            padding: 20, 0
+            spacing: 30
+            Label:
+                text: "Enter parameters"
+                font_size: 30
+                size_hint_y: 2
+
+            TextInput:
+                id: input_text
+                foreground_color: "#eeeeee"
+                background_color: "#444444"
+                background_normal: "white"
+            TextInput:
+                id: input_passphrase
+                foreground_color: "#eeeeee"
+                background_color: "#444444"
+                background_normal: "white"
+            BoxLayout:
+                Button:
+                    id: button_encrypt
+                    size_hint_y: 2
+                    text: "Encode the phrase"
+                    on_release: root.encrypt_string()
+                Button:
+                    id: button_decrypt
+                    size_hint_y: 2
+                    text: "Decode the phrase"
+                    on_release: root.decrypt_string()
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                id: result_data
+                text: "Hi"
+                font_size: dp(30)
