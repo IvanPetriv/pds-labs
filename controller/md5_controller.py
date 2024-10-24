@@ -16,6 +16,7 @@ class Md5Controller(Widget):
     """
     normal_text: StringProperty | str = StringProperty("")
     hashed_text: StringProperty | str = StringProperty("")
+    text: str | bytearray = ""
 
     def open_file(self) -> None:
         """
@@ -25,7 +26,12 @@ class Md5Controller(Widget):
         data = file_manager.open_file()
 
         if data is not None:
-            self.normal_text = data
+            if type(data) is str:
+                self.normal_text = data
+                self.text = data
+            else:
+                self.text = data
+                self.normal_text = ""
 
 
     def save_to_file(self) -> None:
@@ -41,7 +47,10 @@ class Md5Controller(Widget):
         Generates an MD5 hash from `normal_text` and stores it in `hashed_text`.
         """
         self.normal_text = self.ids.input_text.text
-        result = Md5.md5(self.normal_text)
+        if self.normal_text != "":
+            result = Md5.md5(self.normal_text)
+        else:
+            result = Md5.md5(self.text)
         self.hashed_text = result
 
     def check_file(self) -> None:

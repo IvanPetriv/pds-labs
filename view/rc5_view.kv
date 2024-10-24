@@ -1,3 +1,36 @@
+<MyDropDown>:
+    orientation: 'vertical'
+
+    Button:
+        text: 'Select an option'
+        size_hint: (None, None)
+        on_release: dropdown.open(self)
+
+    DropDown:
+        id: dropdown
+        Button:
+            text: 'Option 1'
+            size_hint_y: None
+            height: 44
+            on_release:
+                dropdown.select(self.text)
+        Button:
+            text: 'Option 2'
+            size_hint_y: None
+            height: 44
+            on_release:
+                dropdown.select(self.text)
+        Button:
+            text: 'Option 3'
+            size_hint_y: None
+            height: 44
+            on_release:
+                dropdown.select(self.text)
+
+    Label:
+        id: selected_option
+        text: 'Selected option will appear here'
+
 <Rc5Controller>:
     BoxLayout:
         orientation: "vertical"
@@ -13,32 +46,50 @@
             Label:
                 text: "Enter parameters"
                 font_size: 30
-                size_hint_y: 2
-
+                size_hint_y: 1
             TextInput:
                 id: input_text
+                hint_text: "Text"
                 foreground_color: "#eeeeee"
                 background_color: "#444444"
                 background_normal: "white"
             TextInput:
                 id: input_passphrase
+                hint_text: "Key"
                 foreground_color: "#eeeeee"
                 background_color: "#444444"
                 background_normal: "white"
             BoxLayout:
+                # Encryption modes
+                Label:
+                    id: input_word_size
+                    text: "16"
+                TextInput:
+                    id: input_round_count
+                    hint_text: "Round count"
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
+                TextInput:
+                    id: input_key_size
+                    hint_text: "Key size"
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
+            BoxLayout:
+                size_hint_y: 1
                 Button:
                     id: button_encrypt
-                    size_hint_y: 2
                     text: "Encode the phrase"
                     on_release: root.encrypt_string()
                 Button:
                     id: button_decrypt
-                    size_hint_y: 2
                     text: "Decode the phrase"
                     on_release: root.decrypt_string()
         BoxLayout:
+            # Box for output
             orientation: "vertical"
             Label:
                 id: result_data
-                text: "Hi"
+                text: root.result
                 font_size: dp(30)

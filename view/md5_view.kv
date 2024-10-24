@@ -31,20 +31,28 @@
                 size_hint_y: 2
                 Button:
                     id: button_generate_md5
-                    text: "Generate hash"
+                    text: "Generate hash from text"
                     on_release: root.generate_hash()
                 Button:
                     id: button_write_to_file_md5
-                    text: "Save to file"
+                    text: "Save generated hash to file"
                     on_release: root.save_to_file()
                 Button:
                     id: button_check_file
-                    text: "Check file by its hash"
+                    text: "Check file by its hash from text"
                     on_release: root.check_file()
-
+        Widget:
+            size_hint_y: 0.1
         BoxLayout:
             orientation: "vertical"
-            Label:
-                id: result_data
-                text: root.hashed_text
-                font_size: dp(30)
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Result:"
+                    font_size: dp(20)
+                Label:
+                    id: result_data
+                    text: root.hashed_text
+                    font_size: dp(30)
+                Widget:
+                    size_hint_y: 3

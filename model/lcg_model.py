@@ -1,8 +1,12 @@
+from __future__ import annotations
+from collections.abc import Generator
+
+
 def generate_sequence(modulus: int,
                       multiplier: int,
                       increment: int,
                       start_val: int,
-                      iterations: int = 1000) -> list[int]:
+                      iterations: int = 1000) -> Generator[int, None, None]:
     """
     Generates a sequence of random numbers using *linear congruential generator*.
     :param modulus: The modulus value (m) which defines the range of the numbers.
@@ -21,13 +25,12 @@ def generate_sequence(modulus: int,
     if not 0 <= start_val < modulus:
         raise ValueError(f"The start value has to be in range [0; {modulus}), got {start_val} instead")
 
-    values: list[int] = [start_val] + [0] * (iterations-1)
-    current_value: int = start_val
-    for i in range(1, iterations):
-        current_value = (multiplier * current_value + increment) % modulus
-        values[i] = current_value
+    current_value = start_val
+    yield current_value
 
-    return values
+    for _ in range(1, iterations):
+        current_value = (multiplier * current_value + increment) % modulus
+        yield current_value
 
 
 def measure_period(values: list[int] | tuple[int]) -> int:
@@ -49,5 +52,5 @@ def measure_period(values: list[int] | tuple[int]) -> int:
 
 if __name__ == "__main__":
     result = generate_sequence(2 ** 25 - 1, 12 ** 3, 987, 11)
-    print(result)
-    print(f"Period: {measure_period(result)}, len: {len(result)}")
+    print(list(result))
+    print(f"Period: {measure_period(list(result))}, len: {len(list(result))}")

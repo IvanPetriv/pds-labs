@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Callable
 import math
 
@@ -20,14 +22,17 @@ class Md5:
     __constants = [int(abs(math.sin(i + 1)) * 4294967296) & 0xFFFFFFFF for i in range(64)]
 
     @staticmethod
-    def __pad(msg: str) -> bytearray:
+    def __pad(msg: str | bytearray) -> bytearray:
         """
         Appends padding bits so its length is congruent to 448 % 512.
         After that it appends the length of the message in lower 64 bits
         :return: A bytearray (length is multiple of 64)
         """
         # Appends padding
-        msg: bytearray = bytearray(msg, "ascii")
+        if type(msg) is str:
+            msg: bytearray = bytearray(msg, "utf-8")
+        if type(msg) is not None:
+            msg: bytearray = bytearray(msg)
         msg_len_in_bits: int = (8 * len(msg)) & 0xffffffffffffffff
         msg.append(0x80)
 
