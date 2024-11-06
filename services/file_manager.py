@@ -3,7 +3,7 @@ from __future__ import annotations
 from plyer import filechooser
 
 
-def open_file() -> str | None:
+def open_file() -> bytes | None:
     path = filechooser.open_file(title="Pick a file..")
 
     if path and isinstance(path, list):
@@ -15,13 +15,19 @@ def open_file() -> str | None:
 
 
 
-def save_file(data: str) -> None:
-    file_path = filechooser.save_file(title="Save to file..", path="hash.txt")
+def save_file(data: str | bytes, path="hash.txt") -> None:
+    file_path = filechooser.save_file(title="Save to file..", path=path)
 
     if file_path:
         if isinstance(file_path, list):
             file_path = file_path[0]
-            with open(file_path, "wb") as file:
-                file.write(bytearray(data))
+            if type(data) is str:
+                with open(file_path, "w") as file:
+                    file.write(data)
+            elif type(data) in {bytes, bytearray}:
+                with open(file_path, "wb") as file:
+                    file.write(data)
+            else:
+                print("nothing", type(data))
         else:
             raise FileNotFoundError

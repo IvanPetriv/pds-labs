@@ -47,12 +47,16 @@
                 text: "Enter parameters"
                 font_size: 30
                 size_hint_y: 1
-            TextInput:
-                id: input_text
-                hint_text: "Text"
-                foreground_color: "#eeeeee"
-                background_color: "#444444"
-                background_normal: "white"
+            BoxLayout:
+                TextInput:
+                    id: input_text
+                    hint_text: "Text"
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
+                Button:
+                    text: "Read from file"
+                    on_release: root.open_file()
             TextInput:
                 id: input_passphrase
                 hint_text: "Key"
@@ -61,17 +65,23 @@
                 background_normal: "white"
             BoxLayout:
                 # Encryption modes
-                Label:
+                TextInput:
                     id: input_word_size
                     text: "16"
+                    hint_text: "Word size"
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
                 TextInput:
                     id: input_round_count
+                    text: "20"
                     hint_text: "Round count"
                     foreground_color: "#eeeeee"
                     background_color: "#444444"
                     background_normal: "white"
                 TextInput:
                     id: input_key_size
+                    text: "8"
                     hint_text: "Key size"
                     foreground_color: "#eeeeee"
                     background_color: "#444444"

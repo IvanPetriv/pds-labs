@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import math
+import random
 from abc import ABC, abstractmethod
 
 from model import lcg_model
@@ -118,7 +121,7 @@ class RC5(ABC):
         :return: Shuffled list of words
         """
         L: list[int] = [0] * math.ceil(len(key) / self._word_size_bytes)
-        for i in range(len(key) - 1, -1, -1):
+        for i in range(self._key_size - 1, -1, -1):
             L[i // self._word_size_bytes] = (L[i // self._word_size_bytes] << 8) + key[i]
 
         S: list[int] = [self._p]
@@ -137,18 +140,10 @@ class RC5(ABC):
         return S
 
 
-class RC5_ECB(RC5):
-    def encrypt(self, text: str, key: str, encoding: str = default_encoding) -> str:
-        pass
-
-    def decrypt(self, text: str, key: str, encoding: str = default_encoding) -> str:
-        pass
-
-
 class RC5_CBC_PAD(RC5):
-    def encrypt(self, text: str, key: str, encoding: str = default_encoding) -> str:
-        key: bytes = bytes(key, encoding)
-        text: bytes = self._pad_text(bytes(text, encoding))
+    def encrypt(self, text: str | bytes, key: str | bytes, encoding: str = default_encoding) -> str:
+        key: bytes = bytes(key, encoding) if type(key) is str else key
+        text: bytes = self._pad_text(bytes(text, encoding) if type(text) is str else text)
         encrypted_text: bytearray = bytearray()
 
         block_size_bytes: int = self._word_size_bytes * 2
@@ -177,9 +172,9 @@ class RC5_CBC_PAD(RC5):
         encrypted_text = bytearray(encrypted_iv) + encrypted_text
         return encrypted_text.hex()
 
-    def decrypt(self, text: str, key: str, encoding: str = default_encoding) -> str:
-        key: bytes = bytes(key, encoding)
-        text: bytes = bytes.fromhex(text)
+    def decrypt(self, text: str | bytes, key: str | bytes, encoding: str = default_encoding) -> bytes:
+        key: bytes = bytes(key, encoding) if type(key) is str else key
+        text: bytes = bytes.fromhex(text) if type(text) is str else bytes.fromhex(text.decode(encoding))
         decrypted_text: bytearray = bytearray()
 
         block_size_bytes: int = self._word_size_bytes * 2
@@ -203,7 +198,7 @@ class RC5_CBC_PAD(RC5):
             decrypted_text += current_xor_block
             previous_block = current_block
 
-        return self._unpad_text(decrypted_text).decode(encoding)
+        return self._unpad_text(decrypted_text)
 
     def _pad_text(self, text: bytes, mode: str = "pkcs7") -> bytes:
         match mode.lower():
@@ -229,7 +224,9 @@ class RC5_CBC_PAD(RC5):
         """
         iv: bytearray = bytearray()
 
-        for n in lcg_model.generate_sequence(2 ** 25 - 1, 12 ** 3, 987, 11):
+        for n in lcg_model.generate_sequence(random.randint(2 ** 25 - 1, 2**31-1),
+                                             random.randint(12 ** 3, 12**5), random.randint(200, 20000),
+                                             random.randint(10, 10000)):
             if len(iv) >= self._word_size_bytes * 2:
                 break
             iv.append(n & 255)
