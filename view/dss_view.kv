@@ -15,21 +15,45 @@
                 font_size: 30
                 size_hint_y: 2
             BoxLayout:
-                size_hint_y: 8
+                size_hint_y: 5
                 TextInput:
                     id: input_text
+                    hint_text: "Message"
                     foreground_color: "#eeeeee"
                     background_color: "#444444"
                     background_normal: "white"
                 Button:
                     text: "Select a file"
-                    on_release: root.open_file()
+                    on_release: root.open_text_file()
                     size_hint_x: 0.2
-            Button:
-                id: button_generate_md5
-                size_hint_y: 2
-                text: "Generate hash"
-                on_release: root.generate_hash()
+            BoxLayout:
+                size_hint_y: 5
+                TextInput:
+                    id: input_signature
+                    hint_text: "Signature"
+                    foreground_color: "#eeeeee"
+                    background_color: "#444444"
+                    background_normal: "white"
+                Button:
+                    text: "Select a file"
+                    on_release: root.open_signature_file()
+                    size_hint_x: 0.2
+            BoxLayout:
+                size_hint_y: 8
+                orientation: "vertical"
+                Button:
+                    id: button_generate_key_pair
+                    text: "Generate key pair"
+                    on_release: root.generate_key_pair()
+                BoxLayout:
+                    Button:
+                        id: button_sign_message
+                        text: "Sign message"
+                        on_release: root.sign_message()
+                    Button:
+                        id: button_verify_message
+                        text: "Verify message"
+                        on_release: root.verify_message()
         BoxLayout:
             orientation: "vertical"
             Label:
